@@ -2,8 +2,11 @@ package com.example.jacek.rxtest;
 
 import android.app.Application;
 
-import com.example.jacek.rxtest.events.EventManager;
-import com.example.jacek.rxtest.handler.EkoConnectivityHandler;
+import com.example.jacek.rxtest.events.EventDelegate;
+import com.example.jacek.rxtest.events.EkoEvent;
+import com.example.jacek.rxtest.handlers.connection.EkoConnectivityHandler;
+
+import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * Created by jacek on 26/12/2017 AD.
@@ -11,23 +14,17 @@ import com.example.jacek.rxtest.handler.EkoConnectivityHandler;
 
 public class App extends Application {
 
-    private EkoConnectivityHandler ekoConnectivityObject;
-    private EventManager eventManager;
+    private EkoConnectivityHandler ekoConnectivityHandler;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        eventManager = new EventManager();
-        ekoConnectivityObject = new EkoConnectivityHandler(eventManager.getConnectionPublisher());
+        ekoConnectivityHandler =
+            new EkoConnectivityHandler(
+                new EventDelegate<>(BehaviorSubject.<EkoEvent>create()));
     }
 
-    public EventManager getEventManager() {
-        return eventManager;
-    }
-
-    // just for demo, will not be present
-    @Deprecated
-    public EkoConnectivityHandler getEkoConnectivityObject() {
-        return ekoConnectivityObject;
+    public EkoConnectivityHandler getEkoConnectivityHandler() {
+        return ekoConnectivityHandler;
     }
 }

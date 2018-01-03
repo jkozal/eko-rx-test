@@ -1,7 +1,5 @@
 package com.example.jacek.rxtest.events;
 
-import com.example.jacek.rxtest.events.model.EkoEvent;
-
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;

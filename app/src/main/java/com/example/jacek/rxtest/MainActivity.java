@@ -7,10 +7,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.jacek.rxtest.events.EventReceiver;
-import com.example.jacek.rxtest.events.connection.ConnectionEkoEvent;
+import com.example.jacek.rxtest.handlers.connection.ConnectionState;
+import com.example.jacek.rxtest.events.EkoEvent;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        networkStateReceiver = app.getEventManager().getConnectionSubscriber().subscribe(AndroidSchedulers.mainThread(), new MainConsumer());
+        networkStateReceiver = app.getEkoConnectivityHandler().getSubscriber().subscribe(AndroidSchedulers.mainThread(), new MainConsumer());
     }
 
     @Override
@@ -52,23 +52,23 @@ public class MainActivity extends AppCompatActivity {
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                app.getEkoConnectivityObject().onConnect();
+                app.getEkoConnectivityHandler().onConnect();
             }
         });
 
         disconnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                app.getEkoConnectivityObject().onDisconnect();
+                app.getEkoConnectivityHandler().onDisconnect();
             }
         });
     }
 
-    private class MainConsumer implements Consumer<ConnectionEkoEvent> {
+    private class MainConsumer implements Consumer<EkoEvent<ConnectionState>> {
 
         @Override
-        public void accept(ConnectionEkoEvent event) throws Exception {
-            txt.setText(event.getObject().name());
+        public void accept(EkoEvent<ConnectionState> event) throws Exception {
+            txt.setText(event.getData().name());
         }
     }
 }

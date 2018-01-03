@@ -6,9 +6,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.jacek.rxtest.events.EventReceiver;
 import com.example.jacek.rxtest.events.connection.ConnectionEkoEvent;
-import com.example.jacek.rxtest.events.model.EkoEvent;
-import com.example.jacek.rxtest.events.model.EkoEventId;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -16,7 +15,7 @@ import io.reactivex.functions.Consumer;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Disposable eventsDisposable;
+    private EventReceiver networkStateReceiver;
     private App app;
 
     private TextView txt;
@@ -36,15 +35,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        eventsDisposable = app.getDelegate().subscribe(AndroidSchedulers.mainThread(), new MainConsumer());
+        networkStateReceiver = app.getEventManager().getConnectionSubscriber().subscribe(AndroidSchedulers.mainThread(), new MainConsumer());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (eventsDisposable != null && !eventsDisposable.isDisposed()) {
-            eventsDisposable.dispose();
-        }
+        networkStateReceiver.stop();
     }
 
     private void initFields() {
@@ -67,17 +64,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private class MainConsumer implements Consumer<EkoEvent> {
+    private class MainConsumer implements Consumer<ConnectionEkoEvent> {
 
         @Override
-        public void accept(EkoEvent ekoEvent) throws Exception {
-            switch(ekoEvent.getId()) { // to be considered what in case of 100 types of events
-                case ConnectionState: {
-                    ConnectionEkoEvent event = (ConnectionEkoEvent) ekoEvent;
-                    txt.setText(event.getObject().getState().name());
-                    break;
-                }
-            }
+        public void accept(ConnectionEkoEvent event) throws Exception {
+            txt.setText(event.getObject().name());
         }
     }
 }

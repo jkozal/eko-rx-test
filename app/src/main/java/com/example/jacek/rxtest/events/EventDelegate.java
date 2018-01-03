@@ -11,19 +11,20 @@ import io.reactivex.subjects.BehaviorSubject;
  * Created by jacek on 28/12/2017 AD.
  */
 
-public class EventDelegate {
+public class EventDelegate<T> implements EventPublisher<T>, EventSubscriber {
 
-    private BehaviorSubject<EkoEvent> processor;
+    private BehaviorSubject<T> processor;
 
-    public EventDelegate(BehaviorSubject<EkoEvent> processor) {
+    public EventDelegate(BehaviorSubject<T> processor) {
         this.processor = processor;
     }
 
-    public void sendEvent(EkoEvent event) {
+    public void sendEvent(T event) {
         processor.onNext(event);
     }
 
-    public Disposable subscribe(Scheduler scheduler, Consumer consumer) {
-        return processor.observeOn(scheduler).subscribe(consumer);
+    public EventReceiver subscribe(Scheduler scheduler, Consumer consumer) {
+        Disposable disposable = processor.observeOn(scheduler).subscribe(consumer);
+        return new EventReceiver(disposable);
     }
 }

@@ -1,7 +1,6 @@
 package com.example.jacek.rxtest.events.connection;
 
 import com.example.jacek.rxtest.events.model.EkoEvent;
-import com.example.jacek.rxtest.events.model.EkoEventId;
 
 /**
  * Created by jacek on 28/12/2017 AD.
@@ -9,12 +8,12 @@ import com.example.jacek.rxtest.events.model.EkoEventId;
 
 public class ConnectionEkoEvent extends EkoEvent {
 
-    public ConnectionEkoEvent(EkoEventId id, ConnectionEkoEventData data) {
-        super(id, data);
+    public ConnectionEkoEvent(ConnectionState data) {
+        super(data);
     }
 
     @Override
-    public ConnectionEkoEventData getObject() {
-        return (ConnectionEkoEventData) super.getObject();
+    public ConnectionState getObject() {
+        return (ConnectionState) super.getObject();
     }
 }

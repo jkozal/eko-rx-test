@@ -8,6 +8,6 @@ import io.reactivex.functions.Consumer;
  * Created by jacek on 29/12/2017 AD.
  */
 
-public interface EventSubscriber {
-    EventReceiver subscribe(Scheduler scheduler, Consumer consumer);
+public interface EventSubscriber<T> {
+    EventReceiver subscribe(Scheduler scheduler, T consumer);
 }

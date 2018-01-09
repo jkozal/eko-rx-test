@@ -2,8 +2,9 @@ package com.example.jacek.rxtest;
 
 import android.app.Application;
 
-import com.example.jacek.rxtest.events.EventDelegate;
 import com.example.jacek.rxtest.events.EkoEvent;
+import com.example.jacek.rxtest.events.EventDelegate;
+import com.example.jacek.rxtest.handlers.connection.ConnectionState;
 import com.example.jacek.rxtest.handlers.connection.EkoConnectivityHandler;
 
 import io.reactivex.subjects.BehaviorSubject;
@@ -21,7 +22,7 @@ public class App extends Application {
         super.onCreate();
         ekoConnectivityHandler =
             new EkoConnectivityHandler(
-                new EventDelegate<>(BehaviorSubject.<EkoEvent>create()));
+                new EventDelegate<>(BehaviorSubject.<ConnectionState>create()));
     }
 
     public EkoConnectivityHandler getEkoConnectivityHandler() {

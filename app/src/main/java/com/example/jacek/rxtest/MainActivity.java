@@ -6,9 +6,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.jacek.rxtest.events.EkoEvent;
 import com.example.jacek.rxtest.events.EventReceiver;
 import com.example.jacek.rxtest.handlers.connection.ConnectionState;
-import com.example.jacek.rxtest.events.EkoEvent;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -64,11 +64,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private class MainConsumer implements Consumer<EkoEvent<ConnectionState>> {
+    private class MainConsumer implements Consumer<ConnectionState> {
 
         @Override
-        public void accept(EkoEvent<ConnectionState> event) throws Exception {
-            txt.setText(event.getData().name());
+        public void accept(ConnectionState state) throws Exception {
+            txt.setText(state.name());
         }
     }
 }

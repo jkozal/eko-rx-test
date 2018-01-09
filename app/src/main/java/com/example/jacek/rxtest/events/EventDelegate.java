@@ -6,10 +6,10 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.BehaviorSubject;
 
 /**
- * Created by jacek on 28/12/2017 AD.
+ * Created by jacek on 9/1/2018 AD.
  */
 
-public class EventDelegate<T> implements EventPublisher<T>, EventSubscriber {
+public class EventDelegate<T> implements EventPublisher<T>, EventSubscriber<Consumer<T>> {
 
     private BehaviorSubject<T> processor;
 
@@ -17,11 +17,12 @@ public class EventDelegate<T> implements EventPublisher<T>, EventSubscriber {
         this.processor = processor;
     }
 
+    @Override
     public void sendEvent(T event) {
         processor.onNext(event);
     }
 
-    public EventReceiver subscribe(Scheduler scheduler, Consumer consumer) {
+    public EventReceiver subscribe(Scheduler scheduler, Consumer<T> consumer) {
         Disposable disposable = processor.observeOn(scheduler).subscribe(consumer);
         return new EventReceiver(disposable);
     }
